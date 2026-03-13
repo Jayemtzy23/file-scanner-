@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Document Scanner System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Government Document Scanner</h1>
+            <p>Digitize paper documents to PDF</p>
+        </header>
+
+        <main>
+            <div class="scanner-section">
+                <h2>Scan Document</h2>
+                <div class="camera-controls">
+                    <button id="openCameraBtn" class="btn-camera">📷 Open Camera</button>
+                    <button id="uploadFileBtn" class="btn-upload">📁 Upload Files</button>
+                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                </div>
+
+                <div id="cameraView" class="camera-view" style="display: none;">
+                    <div class="camera-header">
+                        <span id="pageCount">Page 1</span>
+                    </div>
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <div class="camera-actions">
+                        <button id="captureBtn" class="btn-capture">📸 Capture</button>
+                        <button id="closeCameraBtn" class="btn-close">✕ Close</button>
+                    </div>
+                </div>
+                <div id="captureFlash" class="capture-flash"></div>
+
+                <div class="upload-area" id="uploadArea" style="display: none;">
+                    <span class="upload-icon">📷</span>
+                    <p>Drag images here or click to upload</p>
+                    <small>Supports: JPG, PNG (multiple images)</small>
+                </div>
+
+                <div id="previewArea" class="preview-area"></div>
+
+                <div class="document-info">
+                    <input type="text" id="docTitle" placeholder="Document Title" required>
+                    <select id="docCategory">
+                        <option value="">Select Category</option>
+                        <option value="legal">Legal Documents</option>
+                        <option value="financial">Financial Records</option>
+                        <option value="personnel">Personnel Files</option>
+                        <option value="correspondence">Correspondence</option>
+                        <option value="reports">Reports</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" id="docReference" placeholder="Reference Number (optional)">
+                </div>
+
+                <button id="generatePdfBtn" class="btn-primary">Generate PDF</button>
+            </div>
+
+            <div class="documents-section">
+                <h2>Scanned Documents</h2>
+                <div class="filter-bar">
+                    <input type="text" id="searchInput" placeholder="Search documents...">
+                    <select id="filterCategory">
+                        <option value="">All Categories</option>
+                        <option value="legal">Legal</option>
+                        <option value="financial">Financial</option>
+                        <option value="personnel">Personnel</option>
+                        <option value="correspondence">Correspondence</option>
+                        <option value="reports">Reports</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div id="documentsList" class="documents-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

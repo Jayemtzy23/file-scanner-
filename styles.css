@@ -1,0 +1,577 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input, select, button {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+main {
+    padding: 30px;
+}
+
+.scanner-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.scanner-section h2 {
+    color: #2a5298;
+    margin-bottom: 20px;
+}
+
+.camera-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn-camera,
+.btn-upload {
+    padding: 25px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-camera {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-upload {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.btn-camera:active,
+.btn-upload:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.camera-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.camera-header {
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.camera-view video {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-actions {
+    background: rgba(0,0,0,0.8);
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-capture,
+.btn-close {
+    padding: 20px 40px;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    min-width: 140px;
+}
+
+.btn-capture {
+    background: #4caf50;
+    color: white;
+    flex: 1;
+    max-width: 200px;
+}
+
+.btn-close {
+    background: #f44336;
+    color: white;
+}
+
+.btn-capture:active,
+.btn-close:active {
+    transform: scale(0.95);
+}
+
+.capture-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1001;
+    transition: opacity 0.1s;
+}
+
+.capture-flash.active {
+    opacity: 0.8;
+}
+
+.upload-area {
+    border: 3px dashed #667eea;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-area:hover {
+    border-color: #2a5298;
+    background: #f0f4ff;
+}
+
+#fileInput {
+    display: none;
+}
+
+.upload-icon {
+    font-size: 4em;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.upload-area p {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.upload-area small {
+    color: #666;
+}
+
+.preview-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.preview-item {
+    position: relative;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.preview-item .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-item .remove-btn:active {
+    transform: scale(0.9);
+}
+
+.preview-item .page-number {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.document-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.document-info input,
+.document-info select {
+    padding: 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1.1em;
+    min-height: 55px;
+}
+
+.document-info input:focus,
+.document-info select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.3em;
+    border-radius: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    min-height: 65px;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.documents-section h2 {
+    color: #2a5298;
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.documents-list {
+    display: grid;
+    gap: 15px;
+}
+
+.document-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.document-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.doc-icon {
+    font-size: 3em;
+}
+
+.doc-info h3 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.doc-meta {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.doc-category {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.category-legal { background: #e3f2fd; color: #1976d2; }
+.category-financial { background: #f3e5f5; color: #7b1fa2; }
+.category-personnel { background: #e8f5e9; color: #388e3c; }
+.category-correspondence { background: #fff3e0; color: #f57c00; }
+.category-reports { background: #fce4ec; color: #c2185b; }
+.category-other { background: #f5f5f5; color: #616161; }
+
+.doc-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-download,
+.btn-delete {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+}
+
+.btn-download {
+    background: #4caf50;
+    color: white;
+}
+
+.btn-download:hover {
+    background: #45a049;
+}
+
+.btn-delete {
+    background: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #da190b;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state p {
+    font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        border-radius: 0;
+    }
+
+    header {
+        padding: 20px 15px;
+        border-radius: 0;
+    }
+
+    header h1 {
+        font-size: 1.4em;
+    }
+
+    header p {
+        font-size: 0.9em;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    .scanner-section {
+        padding: 15px;
+    }
+
+    .camera-controls {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .btn-camera,
+    .btn-upload {
+        padding: 22px;
+        font-size: 1.1em;
+        min-height: 65px;
+    }
+
+    .camera-actions {
+        padding: 25px 15px;
+        gap: 12px;
+    }
+
+    .btn-capture,
+    .btn-close {
+        padding: 18px 30px;
+        font-size: 1.2em;
+        min-width: 120px;
+    }
+
+    .document-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .document-info input,
+    .document-info select {
+        padding: 18px;
+        font-size: 16px;
+        min-height: 60px;
+    }
+
+    .btn-primary {
+        padding: 22px;
+        font-size: 1.2em;
+        min-height: 70px;
+    }
+    
+    .filter-bar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+        padding: 16px;
+        font-size: 16px;
+        min-height: 55px;
+    }
+    
+    .document-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 20px 15px;
+    }
+
+    .doc-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+    
+    .doc-actions {
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .btn-download,
+    .btn-delete {
+        width: 100%;
+        padding: 16px;
+        font-size: 1.1em;
+        min-height: 55px;
+        border-radius: 10px;
+    }
+
+    .preview-area {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .preview-item {
+        border-radius: 10px;
+    }
+
+    .preview-item img {
+        height: 140px;
+    }
+
+    .documents-section h2 {
+        font-size: 1.3em;
+    }
+}
